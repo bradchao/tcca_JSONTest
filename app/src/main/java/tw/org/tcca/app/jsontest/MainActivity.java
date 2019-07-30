@@ -73,16 +73,22 @@ public class MainActivity extends AppCompatActivity {
 
 
     private void parseJSON(String json){
+        data.clear();
         try {
             JSONArray root = new JSONArray(json);
             Log.v("brad", "count: " + root.length());
             for (int i=0; i< root.length(); i++){
                 JSONObject row = root.getJSONObject(i);
                 String name = row.getString("Name");
-                Log.v("brad", name);
+
+                HashMap<String,String> dd = new HashMap<>();
+                dd.put(from[0],row.getString("Name"));
+                dd.put(from[1],row.getString("Tel"));
+                dd.put(from[2],row.getString("Address"));
+                dd.put("pic", row.getString("PicURL"));
+                data.add(dd);
+
             }
-
-
 
         }catch (Exception e){
             Log.v("brad", e.toString());
