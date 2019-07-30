@@ -5,6 +5,9 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 
+import org.json.JSONArray;
+import org.json.JSONObject;
+
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
@@ -38,12 +41,33 @@ public class MainActivity extends AppCompatActivity {
                     }
                     reader.close();
 
+                    //Log.v("brad", sb.toString());
+                    parseJSON(sb.toString());
 
                 }catch (Exception e){
                     Log.v("brad", e.toString());
                 }
             }
         }.start();
+    }
+
+
+    private void parseJSON(String json){
+        try {
+            JSONArray root = new JSONArray(json);
+            Log.v("brad", "count: " + root.length());
+            for (int i=0; i< root.length(); i++){
+                JSONObject row = root.getJSONObject(i);
+                String name = row.getString("Name");
+                Log.v("brad", name);
+            }
+
+
+
+        }catch (Exception e){
+            Log.v("brad", e.toString());
+        }
+
     }
 
 
