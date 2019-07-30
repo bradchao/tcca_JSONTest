@@ -28,7 +28,7 @@ public class ImageActivity extends AppCompatActivity {
         handler = new UIHandler();
         img = findViewById(R.id.img);
         url = getIntent().getStringExtra("pic");
-        
+
         fetchImageData(url);
 
     }

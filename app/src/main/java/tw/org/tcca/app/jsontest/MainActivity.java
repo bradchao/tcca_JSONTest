@@ -3,6 +3,7 @@ package tw.org.tcca.app.jsontest;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
@@ -33,7 +34,7 @@ public class MainActivity extends AppCompatActivity {
     private LinkedList<HashMap<String,String>> data = new LinkedList<>();
 
     private UIHandler handler;
-    private ProgressBar progressBar;
+    private ProgressDialog progressDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,12 +46,14 @@ public class MainActivity extends AppCompatActivity {
         listView = findViewById(R.id.listView);
         initListView();
 
-        initProgressBar();
+        initProgress();
         fetchData();
     }
 
-    private void initProgressBar(){
-        progressBar = new ProgressBar(this);
+    private void initProgress(){
+        progressDialog = new ProgressDialog(this);
+        progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+        progressDialog.setTitle("Loading...");
     }
 
     private void initListView(){
@@ -74,6 +77,7 @@ public class MainActivity extends AppCompatActivity {
 
 
     private void fetchData(){
+        progressDialog.show();
         new Thread(){
             @Override
             public void run() {
@@ -91,11 +95,15 @@ public class MainActivity extends AppCompatActivity {
                     }
                     reader.close();
 
+                    Thread.sleep(10*1000);
+
+
                     //Log.v("brad", sb.toString());
                     parseJSON(sb.toString());
 
                 }catch (Exception e){
                     Log.v("brad", e.toString());
+                    handler.sendEmptyMessage(-1);
                 }
             }
         }.start();
@@ -120,6 +128,7 @@ public class MainActivity extends AppCompatActivity {
             }
             handler.sendEmptyMessage(0);
         }catch (Exception e){
+            handler.sendEmptyMessage(-1);
             Log.v("brad", e.toString());
         }
 
@@ -135,7 +144,7 @@ public class MainActivity extends AppCompatActivity {
                 adapter.notifyDataSetChanged();
             }
 
-
+            progressDialog.dismiss();
         }
     }
 
