@@ -3,11 +3,15 @@ package tw.org.tcca.app.jsontest;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
+import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 import android.widget.SimpleAdapter;
 
 import org.json.JSONArray;
@@ -29,6 +33,7 @@ public class MainActivity extends AppCompatActivity {
     private LinkedList<HashMap<String,String>> data = new LinkedList<>();
 
     private UIHandler handler;
+    private ProgressBar progressBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,13 +45,31 @@ public class MainActivity extends AppCompatActivity {
         listView = findViewById(R.id.listView);
         initListView();
 
+        initProgressBar();
         fetchData();
+    }
+
+    private void initProgressBar(){
+        progressBar = new ProgressBar(this);
     }
 
     private void initListView(){
         adapter = new SimpleAdapter(
                 this,data,R.layout.item, from, to);
         listView.setAdapter(adapter);
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                showImage(i);
+            }
+        });
+    }
+
+    private void showImage(int index){
+        Intent intent = new Intent(this, ?);
+        intent.putExtra("pic", data.get(index).get("pic"));
+        startActivity(intent);
+
     }
 
 
