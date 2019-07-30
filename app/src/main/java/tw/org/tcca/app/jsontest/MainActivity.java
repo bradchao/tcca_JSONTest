@@ -1,8 +1,11 @@
 package tw.org.tcca.app.jsontest;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.util.Log;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
@@ -25,10 +28,14 @@ public class MainActivity extends AppCompatActivity {
         R.id.item_address};
     private LinkedList<HashMap<String,String>> data = new LinkedList<>();
 
+    private UIHandler handler;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        handler = new UIHandler();
 
         listView = findViewById(R.id.listView);
         initListView();
@@ -87,13 +94,26 @@ public class MainActivity extends AppCompatActivity {
                 dd.put(from[2],row.getString("Address"));
                 dd.put("pic", row.getString("PicURL"));
                 data.add(dd);
-
             }
-
+            handler.sendEmptyMessage(0);
         }catch (Exception e){
             Log.v("brad", e.toString());
         }
 
+    }
+
+
+    private class UIHandler extends Handler {
+        @Override
+        public void handleMessage(@NonNull Message msg) {
+            super.handleMessage(msg);
+
+            if (msg.what == 0){
+                adapter.notifyDataSetChanged();
+            }
+
+
+        }
     }
 
 
