@@ -66,7 +66,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void showImage(int index){
-        Intent intent = new Intent(this, ?);
+        Intent intent = new Intent(this, ImageActivity.class);
         intent.putExtra("pic", data.get(index).get("pic"));
         startActivity(intent);
 
